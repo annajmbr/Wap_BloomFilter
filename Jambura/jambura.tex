@@ -1,10 +1,161 @@
 \section{Funktionsweise und Mathematische Grundlagen}
 \subsection{Aufbau}
-Hier stellst du die relevanten Theorien und Konzepte vor, die für dein Thema wichtig sind. Du erklärst zentrale Begriffe und gibst einen Überblick über den aktuellen Forschungsstand.
+Der Bloomfilter besteht auf einem $m$-stelligen Bitarray, welches initial mit Nullen befüllt wird. 
+Weiters werden $k$ unabhängige Hashfunktionen definiert. Diese verwendet man um die Elemente der gewünschten Menge zu hashen. Abhängig von ihrem Hashwert werden die Elemente dann an der entsprechenden Position im Array eingefügt. 
+Um also jedes Element erfolgreich einzufügen, muss die Hasfunktion $\bmod m$ angewandt werden. Somit erreicht man die Indizes 0 bis $m-1$. \cite{bloomJambura}
 
-Nach \cite{Mustermann2023} ist dies ein wichtiger Aspekt der Forschung. Weitere Studien zeigen, dass...
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Jambura/graphics/Aufbau_Bloom.pdf}
+    \caption{Visualisierung eines Bloomfilters}
+    \label{fig:bloomfilter}
+\end{figure}
+
+Da die Hashfunktionen keinem Sicherheitsstandard entsprechen, müssen keine kryptographischen Eigenschaften gelten. 
+Kryptographische Eigenschaften bedeutet, minimale Eingabeänderungen müssen zu einer maximalen Änderung des Hashwerts führen. Die Eingabe darf nicht mittels der Hashfunktion wiederhergestellt werden können und zwei Eingaben haben fast unmöglich den selben Hashwert.\\
+Für Bloomfilter verwendet man schnelle und einfache Hashfunktionen, da die Effizienz im Vordergrund steht. 
+
 
 \subsection{Einfügen/Suchen}
-Eine kritische Auseinandersetzung mit der existierenden Literatur. Was wurde bereits erforscht? Welche Lücken gibt es?
+\textbf{Einfügen}\\
+Eine Menge $S$ wird nun wie folgt in einem Bloomfilter eingefügt: \\
+Für jedes Element $x \in S$ werden die Hash Werte aller $k$ Hash Funktionen berechnet. 
+Nun wird an diesen Positionen im Array die $0$ auf eine $1$ gesetzt. Sollte an einer dieser Positionen bereits eine $1$ stehen, wird dies ignoriert. Dieser Vorgang wird für alle $n$ Elemente der Menge $S$ wiederholt.
+
+\subsubsection{Beispiel Einfügen}
+Betrachte folgende Menge $S = \{2, 4, 9\}$ und einen Bloomfilter der Länge $m = 10$ mit \\$k = 3$ Hashfunktionen.\\
+Als beispielhafte Hashfunktionen verwenden wir:  $h_1(x) = x \bmod 10$ $h_2(x) = (2x + 3) \bmod 10$ und $h_3(x) = (3x + 7) \bmod 10$.\\
+Nun berechnen wir die Hashwerte für jedes Element der Menge $S$:
+\begin{itemize}
+    \item Für $x = 2$:
+    \begin{align*}
+    h_1(2) &= 2 \bmod 10 = 2 \\
+    h_2(2) &= (2 \cdot 2 + 3) \bmod 10 = 7 \\
+    h_3(2) &= (3 \cdot 2 + 7) \bmod 10 = 3
+    \end{align*}
+    \item Für $x = 4$:
+    \begin{align*}
+    h_1(4) &= 4 \bmod 10 = 4 \\
+    h_2(4) &= (2 \cdot 4 + 3) \bmod 10 = 1 \\
+    h_3(4) &= (3 \cdot 4 + 7) \bmod 10 = 9
+    \end{align*}
+    \item Für $x = 9$:
+    \begin{align*}
+    h_1(9) &= 9 \bmod 10 = 9 \\
+    h_2(9) &= (2 \cdot 9 + 3) \bmod 10 = 1 \\
+    h_3(9) &= (3 \cdot 9 + 7) \bmod 10 = 4
+    \end{align*}
+\end{itemize}
+
+Nun fügt man die Elemente in den Bloomfilter ein. Für das erste Element $2$ werden die Positionen $2$, $7$ und $3$ auf $1$ gesetzt. Daraus resultiert der folgende Bloomfilter: \\
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Jambura/graphics/Element_zwei.pdf}
+    \caption{Bloomfilter nach Einfügen des Elements $2$}
+    \label{fig:bloomfilter_zwei}
+\end{figure}
+
+\newpage
+
+Für das zweite Element $4$ werden die Positionen $4$, $1$ und $9$ auf $1$ gesetzt. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Jambura/graphics/Element_vier.pdf}
+    \caption{Bloomfilter nach Einfügen des Elements $4$}
+    \label{fig:bloomfilter_vier}
+\end{figure}
+
+Für das dritte Element $9$ werden die Positionen $9$, $1$ und $4$ auf $1$ gesetzt. Da die Positionen $1$, $4$ und $9$ bereits auf $1$ gesetzt wurden, ändert sich der Bloomfilter nicht weiter.\\
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Jambura/graphics/Element_neun.pdf}
+    \caption{Bloomfilter nach Einfügen des Elements $9$}
+    \label{fig:bloomfilter_neun}
+\end{figure}
+
+\textbf{Suchen}\\
+Um ein Element $x$ in einem Bloomfilter zu suchen, werden dieselben Hashfunktionen wie beim Einfügen verwendet. 
+Die Hashwerte werden berechnet und an den entsprechenden Positionen im Array geprüft. 
+Wenn alle Positionen auf $1$ gesetzt sind, so ist das Element wahrscheinlich in der Menge enthalten. 
+Wenn mindestens eine Position auf $0$ gesetzt ist, so ist das Element sicher nicht in der Menge enthalten. \cite{bloomJambura}
+
+\subsubsection{Beispiel Suchen}
+Betrachten wir den zuvor erstellten Bloomfilter und suchen nach dem Element $4$.
+Berechnen wir die Hashwerte für $4$:
+\begin{align*}
+h_1(4) &= 4 \bmod 10 = 4 \\
+h_2(4) &= (2 \cdot 4 + 3) \bmod 10 = 1 \\
+h_3(4) &= (3 \cdot 4 + 7) \bmod 10 = 9
+\end{align*}
+Nun prüfen wir die Positionen $4$, $1$ und $9$ im Bloomfilter. Alle drei Positionen sind auf $1$ gesetzt, daher ist das Element $4$ wahrscheinlich in der Menge enthalten.
+
+Betrachten wir nun das Element $5$ und berechnen die Hashwerte:
+\begin{align*}
+h_1(5) &= 5 \bmod 10 = 5 \\
+h_2(5) &= (2 \cdot 5 + 3) \bmod 10 = 3 \\
+h_3(5) &= (3 \cdot 5 + 7) \bmod 10 = 2
+\end{align*}
+Nun prüfen wir die Positionen $5$, $3$ und $2$ im Bloomfilter. Die Position $2$ ist auf $0$ gesetzt, daher ist das Element $5$ sicher nicht in der Menge enthalten.
+
+Ein wichtiger Aspekt des Bloomfilters ist, dass er fälschlicherweise angeben kann, dass ein Element in der Menge enthalten ist, obwohl es tatsächlich nicht vorhanden ist. Dies wird als \textit{False Positive} bezeichnet.
+Wenn alle Positionen, die durch die Hashfunktionen eines Elements angegeben werden, auf $1$ gesetzt sind, obwohl das Element nicht in der Menge enthalten ist, führt dies zu einem False Positive. 
+Ein Beispiel hierfür wäre das Element $12$:
+\begin{align*}
+h_1(12) &= 12 \bmod 10 = 2 \\
+h_2(12) &= (2 \cdot 12 + 3) \bmod 10 = 7 \\
+h_3(12) &= (3 \cdot 12 + 7) \bmod 10 = 3
+\end{align*}
+Die Positionen $2$, $7$ und $3$ sind alle auf $1$ gesetzt, obwohl das Element $12$ nicht in der Menge enthalten ist. Daher würde der Bloomfilter fälschlicherweise angeben, dass $12$ in der Menge enthalten ist.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Jambura/graphics/Suchen_alleElemente.pdf}
+    \caption{Suchen nach den Elementen $4$, $5$ und $12$ im Bloomfilter}
+    \label{fig:suchen_alleElemente}
+\end{figure}
 
 \subsection{Formeln zur Evaluierung}
+\label {sec:formeln}
+\subsubsection{False Positive Probability}
+Zur Erstellung des optimalen Bloomfilter ist es wichtig, die False Positive Probability (FPP) zu berechnen. Diese gibt an, wie wahrscheinlich es ist, dass der Bloomfilter fälschlicherweise angibt, dass ein Element in der Menge enthalten ist, obwohl es tatsächlich nicht vorhanden ist.
+Laut \cite{bloomJambura} entsteht die Formel zur Berechnung aus folgenden Komponenten:\\
+Unter der Annahme, dass die Hashfunktionen unabhängig und gleichverteilt sind, ergibt sich die Wahrscheinlichekeit dass ein bestimmtes der $m$ Bits nicht gesetzt ist durch:
+\begin{equation}
+    1 - \frac{1}{m}
+\end{equation}
+
+Weiters werden nun die $k$ Hashfunktionen mitbetrachtet, immer noch für den Fall, dass ein bestimmtes Bit nicht gesetzt ist. 
+\begin{equation}
+    \left(1 - \frac{1}{m}\right)^k
+\end{equation}
+
+Nun werden die $n$ Elemente der Menge $S$ betrachtet, welche in den Bloomfilter eingefügt werden.
+\begin{equation}    
+    \left(1 - \frac{1}{m}\right)^{kn}
+\end{equation}
+
+Die Wahrscheinlichkeit, dass ein bestimmtes Bit auf $1$ gesetzt ist, ergibt sich aus der Gegenwahrscheinlichkeit:
+\begin{equation}
+    1 - \left(1 - \frac{1}{m}\right)^{kn}
+\end{equation}  
+
+Da es bei Bloomfiltern um Membership-Tests geht, muss die Wahrscheinlichkeit berechnet werden, dass alle $k$ Positionen eines Elements auf $1$ gesetzt sind, obwohl das Element nicht in der Menge enthalten ist.
+\begin{equation}
+    \left(1 - \left(1 - \frac{1}{m}\right)^{kn}\right)^k
+\end{equation}  
+
+Aus der Formel lässt sich schließen, dass je \textbf{größer} $m$ gewählt wird, desto \textbf{kleiner} wird die False Positive Probability. 
+Je \textbf{größer} $n$ gewählt wird, desto \textbf{größer} wird die False Positive Probability.
+
+Da die False Positive Probability so klein wie möglich gehalten werden soll, ist auch die Wahl der Anzahl Hashfunktionen von großer Bedeutung.
+Setzt man die Formel für die False Positive Probability gleich $0$ und löst sie nach $k$ auf, erhält man die optimale Anzahl an Hashfunktionen:
+\begin{equation}
+    k_{opt} = \frac{m}{n} \ln 2 \approx  \frac{9m}{13n}
+\end{equation}
+
+
+
+
+
+
+

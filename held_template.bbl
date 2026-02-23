@@ -1,3 +1,8 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{TRL12}
+
+\bibitem[TRL12]{bloomJambura}
+Sasu Tarkome, Christian~Esteve Rothenberg, and Eemil Lagerspetz.
+\newblock Theory and practice of bloom filters for distributed systems.
+\newblock {\em IEEE Communications Surveys \& Tutorials}, 14(1):131--155, 2012.
 
 \end{thebibliography}
