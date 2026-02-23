@@ -4,6 +4,14 @@ In verteilten Peer-to-Peer Netzwerken arbeiten mehrere Proxy-Server zusammen und
 
 Damit dieses System funktioniert, muss jeder Proxy über den Inhalt der Caches aller anderen Proxies Bescheid wissen. Um den enormen Netzwerkverkehr, der beim wiederholten Austausch der kompletten URL-Listen entstehen würde, zu vermeiden, kommen hier Bloomfilter zum Einsatz. In dem Summary Cache Protokoll tauschen Proxies periodisch Bloomfilter untereinander aus, die den Inhalt ihres Caches zusammenfassen. Wenn nun ein Cache-Miss auftritt, werden die Bloomfilter jener anderen Proxies konsultiert, die ein positives Ergebnis versprechen und die Anfrage wird entsprechend weitergeleitet. 
 
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Schnappauf/graphics/WebProxyCaching.pdf}
+    \caption{Web-Proxy-Caching mit Bloomfiltern}
+    \label{fig:webproxycaching}
+\end{figure}
+
 Hierbei können False-Positives auftreten, wobei es dann zu einer minimalen Verzögerung kommt. Die massive Reduktion des Netzwerkverkehrs durch den Bloomfilter überwiegt diesen Nachteil bei Weitem. Das Summary Cache Protokoll wird beispielsweise im Web-Proxy-Cache „Squid“ eingesetzt.
 
 \subsection{Google Bigtable}

@@ -286,6 +286,12 @@ OUTPUT Schnappauf\schnappauf_end.aux
 INPUT .\Schnappauf\schnappauf_end.tex
 INPUT .\Schnappauf\schnappauf_end.tex
 INPUT Schnappauf\schnappauf_end.tex
+INPUT .\Schnappauf\graphics\WebProxyCaching.pdf
+INPUT .\Schnappauf\graphics\WebProxyCaching.pdf
+INPUT .\Schnappauf\graphics\WebProxyCaching.pdf
+INPUT .\Schnappauf\graphics\WebProxyCaching.pdf
+INPUT .\Schnappauf\graphics\WebProxyCaching.pdf
+INPUT .\Schnappauf\graphics\WebProxyCaching.pdf
 INPUT .\held_template.bbl
 INPUT .\held_template.bbl
 INPUT held_template.bbl
