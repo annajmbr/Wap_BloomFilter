@@ -1,23 +1,16 @@
-This is BibTeX, Version 0.99e
+This is BibTeX, Version 0.99d (TeX Live 2025)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
-The top-level auxiliary file: held_template.aux
-Reallocating 'name_of_file' (item size: 1) to 32 items.
+The top-level auxiliary file: main.aux
 A level-1 auxiliary file: Schnappauf/schnappauf_start.aux
-Reallocating 'name_of_file' (item size: 1) to 20 items.
 A level-1 auxiliary file: Jambura/jambura.aux
-Reallocating 'name_of_file' (item size: 1) to 28 items.
 A level-1 auxiliary file: Puerstinger/puerstinger.aux
-Reallocating 'name_of_file' (item size: 1) to 18 items.
 A level-1 auxiliary file: Thiele/thiele.aux
-Reallocating 'name_of_file' (item size: 1) to 30 items.
 A level-1 auxiliary file: Schnappauf/schnappauf_end.aux
-Reallocating 'name_of_file' (item size: 1) to 10 items.
-Reallocating 'name_of_file' (item size: 1) to 9 items.
 The style file: unsrtnat.bst
 Database file #1: literatur.bib
 You've used 11 entries,
             2481 wiz_defined-function locations,
-            636 strings with 6600 characters,
+            636 strings with 6582 characters,
 and the built_in function-call counts, 4768 in all, are:
 = -- 403
 > -- 271

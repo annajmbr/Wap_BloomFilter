@@ -1,11 +1,11 @@
 \section{Pseudocode und Implementierung}
-Ein Bloom-Filter lässt sich mit drei grundlegenden Operationen beschreiben: Initialisierung, Einfügen und Abfragen.
+Ein Bloom Filter lässt sich mit drei grundlegenden Operationen beschreiben: Initialisierung, Einfügen und Abfragen.
 
 \subsection{Initialisierung}
-Bei der Initialisierung werden alle $m$ Bits im Array auf $0$ gesetzt und $k$ Hash-Funktionen festgelegt. Je kleiner die gewünschte Fehlerrate ist, desto größer muss $m$ gewählt werden.
+Bei der Initialisierung werden alle $m$ Bits im Array auf $0$ gesetzt und $k$ Hash-Funktionen festgelegt. Je kleiner die gewünschte Fehlerrate sein soll, desto größer muss $m$ gewählt werden.
 
 \begin{algorithm}
-\caption{Initialisierung eines Bloom-Filters}
+\caption{Initialisierung eines Bloom Filters}
 \begin{algorithmic}[1]
 \State Erzeuge Bit-Array $B[0 \dots m-1]$ und setze alle Bits auf $0$
 \State Definiere Hash-Funktionen $h_1, h_2, \dots, h_k$
@@ -64,21 +64,21 @@ sondern nur von zwei Faktoren: der Anzahl der zu speichernden Elemente~$n$
 und der akzeptierten False-Positive-Rate~$\varepsilon$~\cite{burtonbloom}.
 
 Als praktische Faustregel gilt: Bei einer Fehlerrate von etwa $1\,\%$ benötigt
-ein Bloom-Filter weniger als $10$~Bits pro Element. Das ist
+ein Bloom Filter weniger als $10$~Bits pro Element. Das ist
 bemerkenswert effizient -- unabhängig davon, ob es sich bei den Elementen um
 kurze Zeichenketten oder lange URLs handelt~\cite{fan2000}.
 
 \subsection{Vergleich mit anderen Datenstrukturen}
 
 Tabelle~\ref{tab:vergleich} stellt die Komplexitätseigenschaften des
-Bloom-Filters denen einer Hash-Tabelle mit verketteten Listen sowie eines
+Bloom Filters denen einer Hash-Tabelle mit verketteten Listen sowie eines
 balancierten Baums gegenüber.
 
 \begin{table}[ht]
     \centering
     \begin{tabular}{p{3.5cm}p{3.5cm}p{3.5cm}p{3.5cm}}
         \hline
-        \textbf{Eigenschaft} & \textbf{Bloom-Filter} & \textbf{Hash-Tabelle mit Chaining} & \textbf{Balancierter Baum} \\
+        \textbf{Eigenschaft} & \textbf{Bloom Filter} & \textbf{Hash-Tabelle mit Chaining} & \textbf{Balancierter Baum} \\
         \hline
         Zeitkomplexität & $\mathcal{O}(k)$ & $\varnothing\,\mathcal{O}(1)$, worst $\mathcal{O}(n)$ & $\mathcal{O}(\log n)$ \\
         Speicherkomplexität & $\mathcal{O}(m)$ & $\mathcal{O}(n)$ & $\mathcal{O}(n)$ \\
@@ -108,13 +108,13 @@ Operationen wie Bereichsabfragen erlaubt~\cite{Broder01012004}.
 \subsection{Speichereffizienz in der Praxis}
 
 Um die Speicherersparnis greifbar zu machen, betrachten wir ein konkretes
-Beispiel: Für $100$~Millionen URLs benötigt ein Bloom-Filter bei einer
+Beispiel: Für $100$~Millionen URLs benötigt ein Bloom Filter bei einer
 Fehlerrate von $1\,\%$ rund $120$~Megabyte. Eine Hash-Tabelle mit denselben
 Einträgen würde hingegen über ein Gigabyte beanspruchen. Das
 ist nicht nur ein quantitativer, sondern oft ein qualitativer Unterschied --
 nämlich der zwischen einem System, das auf einem Endgerät lauffähig ist, und
 einem, das einen dedizierten Server erfordert.
 
-Dieser enorme Vorteil hat allerdings seinen Preis: Ein Bloom-Filter beantwortet
+Dieser enorme Vorteil hat allerdings seinen Preis: Ein Bloom Filter beantwortet
 ausschließlich die Frage \emph{,,Ist das Element möglicherweise in der
 Menge? ``} Er kann weder Elemente aufzählen noch löschen, noch gibt er die Elemente selbst zurück~\cite{bloomJambura}.
